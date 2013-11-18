@@ -5,6 +5,7 @@
 #define FALSE = 0;
 #define _PICTURE_PATH = /tmp/pictures/picture.png;
 
+void webcamInit();
 FILE* takePicture();
 void startRecording();
 void stopRecording();

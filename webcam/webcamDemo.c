@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 int main(){
+	webcamInit();
 	takePicture();
 	delay(2000);
 	startRecording();
