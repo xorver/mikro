@@ -10,14 +10,14 @@ void webcamInit(){
 }
 
 FILE *takePicture(){
-	exec("sudo fswebcam -q -r 320x240 --png 8 /tmp/pictures/picture.png");
+	system("sudo fswebcam -q -r 320x240 --png 8 /tmp/pictures/picture.png");
 	return fopen(_PICTURE_PATH, "r");
 }
 
 void startRecording(){
-	exec("sudo motion start");
+	system("sudo ffmpeg -f video4linux2 -r 25 -s 320x240 -i /dev/video0 /tmp/videos/video.avi &");
 }
 
 void stopRecording(){
-	exec("sudo motion stop");
+	system("sudo kill -SIGINT `ps aux | grep ffmpeg | awk '{print $2}'`");
 }

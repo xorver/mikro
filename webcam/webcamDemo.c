@@ -1,13 +1,14 @@
 #include "basicWebcamFunctionality.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 int main(){
 	webcamInit();
 	takePicture();
-	delay(2000);
+	sleep(2);
 	startRecording();
-	delay(10000);
+	sleep(10);
 	stopRecording();
-	return TRUE;
+	return 0;
 }
