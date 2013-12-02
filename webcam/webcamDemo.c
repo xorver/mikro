@@ -1,4 +1,5 @@
 #include "basicWebcamFunctionality.h"
+#include "email.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -10,5 +11,9 @@ int main(){
 	startRecording();
 	sleep(10);
 	stopRecording();
+	
+	emailInit();
+	sendVideo("email.h");
+	
 	return 0;
 }

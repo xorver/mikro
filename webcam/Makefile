@@ -1,15 +1,14 @@
-CC=gcc
-DEPS = basicWebcamFunctionality.h
-OBJS = basicWebcamFunctionality.o webcamDemo.o
+DEPS = basicWebcamFunctionality.h email.h
+OBJS = basicWebcamFunctionality.o webcamDemo.o email.o
 
 all:
 	gcc monitoring.c -o monitoring
 
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $<
+	gcc -c -o $@ $<
 
-webcamDemo: basicWebcamFunctionality.o webcamDemo.o
-	gcc -o $@ basicWebcamFunctionality.o webcamDemo.o
+webcamDemo: basicWebcamFunctionality.o webcamDemo.o email.o
+	gcc -o $@ basicWebcamFunctionality.o webcamDemo.o email.o
 
 clean:
 	rm -f webcamDemo
