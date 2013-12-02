@@ -14,6 +14,5 @@ int main(){
 	
 	emailInit();
 	sendVideo("email.h");
-	
 	return 0;
 }
