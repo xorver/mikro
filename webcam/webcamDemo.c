@@ -11,6 +11,7 @@ int main(){
 	startRecording();
 	sleep(10);
 	stopRecording();
+	webcamStop();
 	
 	emailInit();
 	sendVideo("email.h");
