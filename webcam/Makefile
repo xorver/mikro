@@ -10,6 +10,9 @@ all:
 webcamDemo: basicWebcamFunctionality.o webcamDemo.o email.o
 	gcc -o $@ basicWebcamFunctionality.o webcamDemo.o email.o
 
+opencvDemo:
+	g++ -ggdb -I/usr/include/opencv2 -o main test.cpp `pkg-config --libs opencv`
+
 clean:
 	rm -f webcamDemo
 	rm -f monitoring
