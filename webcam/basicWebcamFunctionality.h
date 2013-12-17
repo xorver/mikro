@@ -1,14 +1,14 @@
 #ifndef _BWCF
 #define _BWCF
 
-#include<stdio.h>
-#define _PICTURE_PATH "/tmp/pictures/picture.png"
-
+#include "core/core_c.h"
+#include "core/types_c.h"
+#include "highgui/highgui_c.h"
 
 void webcamInit();
-FILE* takePicture();
-void startRecording();
-void stopRecording();
+char *takePicture();
+//void startRecording();
+//void stopRecording();
 void webcamStop();
 
 #endif
