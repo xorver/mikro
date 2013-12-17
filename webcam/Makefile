@@ -5,14 +5,10 @@ all:
 	gcc monitoring.c -o monitoring
 
 %.o: %.c $(DEPS)
-	gcc -c -o $@ $<
+	gcc -I/usr/local/include/opencv2 -c -o $@ $< `pkg-config --libs opencv`
 
 webcamDemo: basicWebcamFunctionality.o webcamDemo.o email.o
-	gcc -o $@ basicWebcamFunctionality.o webcamDemo.o email.o
-
-opencvDemo:
-	g++ -ggdb -I/usr/include/opencv2 -o main test.cpp `pkg-config --libs opencv`
-
+	gcc -I/usr/local/include/opencv2 -o $@ basicWebcamFunctionality.o webcamDemo.o email.o `pkg-config --libs opencv`
 
 clean:
 	rm -f webcamDemo

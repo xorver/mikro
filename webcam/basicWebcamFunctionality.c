@@ -1,23 +1,31 @@
 #include "basicWebcamFunctionality.h"
-#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "core/core_c.h"
+#include "core/types_c.h"
+#include "highgui/highgui_c.h"
+
+CvCapture* capture;
 
 void webcamInit(){
-	mkdir("/tmp/pictures", 0777);
-	mkdir("/tmp/videos", 0777);
 	chmod("/dev/video0", 0777);
+	capture = cvCaptureFromCAM(CV_CAP_ANY);
 }
 
-FILE *takePicture(){
-	exec("sudo fswebcam -q -r 320x240 --png 8 /tmp/pictures/picture.png");
-	return fopen(_PICTURE_PATH, "r");
+char* takePicture(){
+	return cvQueryFrame(capture)->imageData;
 }
 
-void startRecording(){
-	exec("sudo motion start");
+/*void startRecording(){
+	stopPhotoDeamon();
+	system("sudo ffmpeg -f video4linux2 -r 25 -s 320x240 -i /dev/video0 /tmp/videos/video.avi &");
 }
 
 void stopRecording(){
-	exec("sudo motion stop");
+	system("sudo kill -SIGINT `ps aux | grep ffmpeg | awk '{print $2}'`");
+	startPhotoDeamon();
+}*/
+
+void webcamStop(){
+	cvReleaseCapture(&capture);
 }
