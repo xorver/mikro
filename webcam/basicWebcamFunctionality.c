@@ -16,17 +16,20 @@ void webcamInit(){
 }
 
 IplImage* takePicture(){
-	printf("taking picture\n");
+	//printf("taking picture\n");
+	//fflush(stdout);
 	return cvQueryFrame(capture);
 }
 
 void startRecording(){
-	printf("starting recoding\n");
+	printf("***start recoding***\n");
+	fflush(stdout);
 	//todo infinite loop which takes photos
 }
 
 void stopRecording(){
-	printf("stopping recoding\n");
+	printf("***stop recoding***\n");
+	fflush(stdout);
 	//todo get all created photos from startRecording and convert them to movie
 }
 
