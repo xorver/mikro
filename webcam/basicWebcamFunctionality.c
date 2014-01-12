@@ -1,4 +1,5 @@
 #include "basicWebcamFunctionality.h"
+#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "core/core_c.h"
@@ -8,24 +9,27 @@
 CvCapture* capture;
 
 void webcamInit(){
+	capture = cvCaptureFromCAM(CV_CAP_ANY); //Capture using any camera connected to your system
+	mkdir("/tmp/pictures", 0777);
+	mkdir("/tmp/videos", 0777);
 	chmod("/dev/video0", 0777);
-	capture = cvCaptureFromCAM(CV_CAP_ANY);
 }
 
-char* takePicture(){
-	return cvQueryFrame(capture)->imageData;
+IplImage* takePicture(){
+	printf("taking picture\n");
+	return cvQueryFrame(capture);
 }
 
-/*void startRecording(){
-	stopPhotoDeamon();
-	system("sudo ffmpeg -f video4linux2 -r 25 -s 320x240 -i /dev/video0 /tmp/videos/video.avi &");
+void startRecording(){
+	printf("starting recoding\n");
+	//todo infinite loop which takes photos
 }
 
 void stopRecording(){
-	system("sudo kill -SIGINT `ps aux | grep ffmpeg | awk '{print $2}'`");
-	startPhotoDeamon();
-}*/
+	printf("stopping recoding\n");
+	//todo get all created photos from startRecording and convert them to movie
+}
 
-void webcamStop(){
-	cvReleaseCapture(&capture);
+void webcamTeardown(){
+	cvReleaseCapture(&capture); //Release capture.
 }
