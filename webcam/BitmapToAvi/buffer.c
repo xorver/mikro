@@ -114,10 +114,6 @@ void __rawPut(BitBuffer* self, uint8_t byte)
 
 void __rawWrite(BitBuffer* self, void* data, uint32_t size, uint32_t count)
 {
-	//memcpy(self->_insert, data, size*count);
-	//self->_insert += size;
-	//self->_length += size;
-
 	uint32_t totalSize = size*count;
 	uint8_t* rawData = (uint8_t*) data;
 

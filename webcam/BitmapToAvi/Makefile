@@ -2,11 +2,9 @@ VPATH =.
 NAME = kloc
 CFLAGS = 
 CC = gcc
-OBJECTS = buffer.o map.o head.o transform.o input.o huffman.o encoder.o const.o
-
+OBJECTS = buffer.o map.o head.o transform.o input.o huffman.o encoder.o const.o jpegtoavi.o llist.o
 
 all: commands clean
-p: files  
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c $< -o $@ 	
@@ -18,5 +16,6 @@ commands: $(OBJECTS)
 
 
 clean:
-	rm -f $(OBJECTS) 
+	rm -f $(OBJECTS)
+	rm -f *~
 
