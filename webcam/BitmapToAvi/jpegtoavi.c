@@ -145,9 +145,10 @@ void print_quartet(unsigned int i, FILE* f)
 }
 
 
-int makeMovie(int argc, char **argv)
+int makeMovieInside(int argc, char **argv,char* path)
 {
- FILE *film = fopen("filmik.avi", "w");
+	
+ FILE *film = fopen(path, "w");
   DWORD per_usec = 1;
   DWORD width;
   DWORD height;
@@ -381,4 +382,27 @@ int makeMovie(int argc, char **argv)
 	fflush(film);
 	fclose(film);
   return 0;
+}
+
+void makeMovie(int amount, char* path, int fps){
+	char** photos = malloc(sizeof(char*)*(amount+4));
+	int i;
+	for(i=0; i<amount+4; i++){
+		photos[i] = malloc(50);	
+	}
+	photos[0] = "moviemaker";
+	sprintf(photos[1], "%d", fps);
+	sprintf(photos[2], "%d", W);
+	sprintf(photos[3], "%d", H);
+
+	char* tmp = malloc(50);
+	for(i=4; i<amount+4;i++){
+		sprintf(tmp, "%d", (i-4));	
+		strcpy(photos[i], path);
+		strcat(photos[i], tmp);
+	}
+	char film[50];
+	strcpy(film, path);
+	strcat(film, "filmik.avi");
+	makeMovieInside(amount+4, photos, film);
 }
