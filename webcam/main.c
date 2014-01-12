@@ -11,10 +11,8 @@
 
 #define DURING_RECORDING_INTERVAL 3000000
 #define DURING_WAITING_INTERVAL 200000
-#define PIXEL_VALUE_EPSILON 30 
-#define MINIMAL_DIFFERENCE_PERCENTAGE 10
-//(640*480*3)
-#define IMAGE_DATA_SIZE 921600
+
+
 
 int i;
 int keepGoing=1;
@@ -32,7 +30,7 @@ void intHandler(int dummy) {
     keepGoing=0;
 }
 
-int isDifferent(char* first, char* second){
+/*int isDifferent(char* first, char* second){
 	int diffrentPixelsNo=0;
 	char* p1 = first;
 	char* p2 = second;
@@ -46,10 +44,10 @@ int isDifferent(char* first, char* second){
 	printf("pictures different in: %d%%, returning %d\n",differentInPercents,differentInPercents>MINIMAL_DIFFERENCE_PERCENTAGE);
 	fflush(stdout);
 	return differentInPercents>MINIMAL_DIFFERENCE_PERCENTAGE;
-}
+}*/
 
 // recording loop, stops recording if nothing changes on view
-void recordingLoop(char* previousImage, char* actualImage){
+/*void recordingLoop(char* previousImage, char* actualImage){
 	startRecording();
 	while(isDifferent(previousImage,actualImage) && keepGoing){
 		memcpy(previousImage,actualImage,IMAGE_DATA_SIZE);
@@ -58,18 +56,20 @@ void recordingLoop(char* previousImage, char* actualImage){
 	}
 	stopRecording();
 }
+*/
 
 //starts recording if something changes
 void detectingMotionLoop(){
 	char* actualImage=(char*)malloc(IMAGE_DATA_SIZE);
 	char* previousImage=(char*)malloc(IMAGE_DATA_SIZE);
+	char* imageData;
 	memcpy(actualImage,takePicture()->imageData,IMAGE_DATA_SIZE);
 	while(keepGoing){
 		memcpy(previousImage,actualImage,IMAGE_DATA_SIZE);
-		char* imageData = takePicture()->imageData;
-		memcpy(actualImage,imageData,IMAGE_DATA_SIZE);
 		if(isDifferent(previousImage,actualImage))
-			recordingLoop(previousImage,actualImage);
+			startRecording();
+		imageData = takePicture()->imageData;
+		memcpy(actualImage,imageData,IMAGE_DATA_SIZE);
 		usleep(DURING_WAITING_INTERVAL);
 	}
 }
