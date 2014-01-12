@@ -23,6 +23,7 @@ int main()
 		fwrite(fotka->image, sizeof(char), fotka->size, file);
 		tmp[6] = 0;		
 		fflush(file);
+		free(fotka->image);
 		usleep(200);
 	}
 	fclose(file);
