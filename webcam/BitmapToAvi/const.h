@@ -13,7 +13,7 @@
 	extern uint8_t std_ac_chrominance_nrcodes[17];
 	extern uint8_t std_ac_chrominance_values[162];
 
-	// Huffman tables
+	/*Huffman tables*/
 	extern uint16_t YDC_HT[256][2];
 	extern uint16_t UVDC_HT[256][2];
 	extern uint16_t YAC_HT[256][2];
