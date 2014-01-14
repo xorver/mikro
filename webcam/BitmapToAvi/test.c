@@ -13,6 +13,9 @@ int main(){
 	char tmp[50] = "photo/";
 	int i = 0;
 	capture = cvCaptureFromCAM( 0 );
+    fotka =(JPEG*) malloc(sizeof(struct JPEG));
+    fotka->image=(uint8_t*)malloc(30000);
+    
 	for(i=0; i< 200; i++){
 		frame = cvQueryFrame( capture );
 		fotka = encode(frame);
@@ -31,8 +34,8 @@ int main(){
 	//fclose(file);
 	makeMovie(200, "photo/", 50000);
 	encoderTeardown();
-	//free(fotka->image);
-	//free(fotka);
+	free(fotka->image);
+	free(fotka);
 	return 0;
 }
 

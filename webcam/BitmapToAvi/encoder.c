@@ -30,10 +30,9 @@ void encoderInit(){
 }
 
 
-JPEG* encode(IplImage* frame){
+void encode(IplImage* frame,JPEG* result){
 	
 	int i;
-	JPEG* result;	
 
 	
 	initInput(frame);
@@ -44,12 +43,8 @@ JPEG* encode(IplImage* frame){
 
 	
 	result->size = _buffer->_length;
-	//delBitBuffer(_buffer);
-	//delEncoderInput(_input);
-	result->image = (uint8_t*) malloc(result->size);
 	for(i=0; i < result->size; i++)
 		result->image[i] = outBuffer[i];
-	//free(outBuffer);	
 	return result;
 }
 
