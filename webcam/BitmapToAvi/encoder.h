@@ -19,6 +19,7 @@ typedef struct JPEG
 }
 JPEG;	
 
+void encoderInit();
 JPEG* encode(IplImage* frame);
 
 void initInput(IplImage *frame);

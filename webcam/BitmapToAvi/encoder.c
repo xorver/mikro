@@ -7,29 +7,49 @@ uint8_t YTable[64];
 uint8_t UVTable[64];
 real fdtbl_Y[64];
 real fdtbl_UV[64];
+
+uint8_t* outBuffer;
 BitBuffer* _buffer;
 HuffmanEncoder* _huffman;
 EncoderInput* _input;
 
+void encoderTeardown(){
+	delBitBuffer(_buffer);
+	delHuffmanEncoder(_huffman);
+	free(outBuffer);
+	free(_input);
+}
+
+
+void encoderInit(){
+	outBuffer = (uint8_t*)malloc(30000);	
+	//_buffer = newBitBuffer(outBuffer);
+	//_huffman = newHuffmanEncoder(_buffer);
+	_input = (EncoderInput*) malloc(sizeof(EncoderInput));
+	initTables();
+}
+
+
 JPEG* encode(IplImage* frame){
-	uint8_t* outBuffer = (uint8_t*) malloc(30000);	
+	
 	int i;
 	JPEG* result;	
 
-	initTables();
+	
 	initInput(frame);
+	//initTables();
 	_buffer = newBitBuffer(outBuffer);
 	_huffman = newHuffmanEncoder(_buffer);
 	encodeCore(_input->data, _input->rows, _input->cols, _input->components);
 
-	delHuffmanEncoder(_huffman);
+	
 	result->size = _buffer->_length;
-	delBitBuffer(_buffer);
-	delEncoderInput(_input);
+	//delBitBuffer(_buffer);
+	//delEncoderInput(_input);
 	result->image = (uint8_t*) malloc(result->size);
 	for(i=0; i < result->size; i++)
 		result->image[i] = outBuffer[i];
-	free(outBuffer);	
+	//free(outBuffer);	
 	return result;
 }
 
@@ -58,7 +78,7 @@ void initTables()
 }
 
 void initInput(IplImage *frame){
-	_input = (EncoderInput*) malloc(sizeof(EncoderInput));
+	//_input = (EncoderInput*) malloc(sizeof(EncoderInput));
 	int32_t w, h, ch;
 	uint8_t* rawData;
 	uint32_t x, y, i;
@@ -251,3 +271,5 @@ void createHeaders(uint16_t height, uint16_t width, uint8_t header0[25], uint8_t
 	header2[12] = 0x3F;
 	header2[13] = 0x00;
 }
+
+

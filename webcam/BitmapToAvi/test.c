@@ -8,12 +8,12 @@ JPEG* fotka;
 FILE* file;
 IplImage *frame;
 
-int main()
-{
+int main(){
+	encoderInit();
 	char tmp[50] = "photo/";
 	int i = 0;
 	capture = cvCaptureFromCAM( 0 );
-	for(i=0; i< 100; i++){
+	for(i=0; i< 200; i++){
 		frame = cvQueryFrame( capture );
 		fotka = encode(frame);
 		char s[10];
@@ -24,10 +24,15 @@ int main()
 		tmp[6] = 0;		
 		fflush(file);
 		free(fotka->image);
-		usleep(200);
+		fclose(file);
+		usleep(50);
+
 	}
-	fclose(file);
-	makeMovie(100, "photo/", 200000);
+	//fclose(file);
+	makeMovie(200, "photo/", 50000);
+	encoderTeardown();
+	//free(fotka->image);
+	//free(fotka);
 	return 0;
 }
 

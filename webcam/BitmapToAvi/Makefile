@@ -1,5 +1,5 @@
 VPATH =.
-NAME = kloc
+NAME = test
 CFLAGS = 
 CC = gcc
 OBJECTS = buffer.o map.o head.o transform.o input.o huffman.o encoder.o const.o jpegtoavi.o llist.o
@@ -11,7 +11,7 @@ all: commands clean
 	
 
 commands: $(OBJECTS) 
-	$(CC) kloc.c -o $(NAME) $(OBJECTS) `pkg-config --libs --cflags opencv` -ldl -lm
+	$(CC) test.c -o $(NAME) $(OBJECTS) `pkg-config --libs --cflags opencv` -ldl -lm
 
 
 
