@@ -16,8 +16,9 @@ EncoderInput* _input;
 void encoderTeardown(){
 	delBitBuffer(_buffer);
 	delHuffmanEncoder(_huffman);
+	delEncoderInput(_input);
 	free(outBuffer);
-	free(_input);
+	//free(_input);
 }
 
 
@@ -45,7 +46,7 @@ void encode(IplImage* frame,JPEG* result){
 	result->size = _buffer->_length;
 	for(i=0; i < result->size; i++)
 		result->image[i] = outBuffer[i];
-	return result;
+	//return result;
 }
 
 void initTables()

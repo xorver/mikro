@@ -13,27 +13,29 @@ int main(){
 	char tmp[50] = "photo/";
 	int i = 0;
 	capture = cvCaptureFromCAM( 0 );
-    fotka =(JPEG*) malloc(sizeof(struct JPEG));
+    fotka =(JPEG*) malloc(sizeof(JPEG));
     fotka->image=(uint8_t*)malloc(30000);
-    
-	for(i=0; i< 200; i++){
+    char s[10];
+	for(i=0; i< 50; i++){
 		frame = cvQueryFrame( capture );
-		fotka = encode(frame);
-		char s[10];
+		encode(frame, fotka);
+		//char s[10];
 		sprintf(s,"%d",i);
 		strcat(tmp, s);
 		file = fopen(tmp, "w");
 		fwrite(fotka->image, sizeof(char), fotka->size, file);
-		tmp[6] = 0;		
+		tmp[6] = 0;
+		s[0] = 0;		
 		fflush(file);
-		free(fotka->image);
+		//free(fotka->image);
 		fclose(file);
-		usleep(50);
+		usleep(100);
 
 	}
+	
 	//fclose(file);
-	makeMovie(200, "photo/", 50000);
-	encoderTeardown();
+	makeMovie(50, "photo/", 100000);
+	//encoderTeardown();
 	free(fotka->image);
 	free(fotka);
 	return 0;
