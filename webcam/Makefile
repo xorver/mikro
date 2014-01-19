@@ -1,19 +1,19 @@
-DEPS = basicWebcamFunctionality.h email.h
+CC = gcc
+OBJECTS = basicWebcamFunctionality.o email.o JpegToAvi/jpegtoavi.o JpegToAvi/llist.o BitmapToJpeg/BitmapToJpeg.o BitmapToJpeg/BitBuffer.o BitmapToJpeg/Bitmap.o BitmapToJpeg/DibHeader.o BitmapToJpeg/DiscreteCosineTransform.o BitmapToJpeg/EncoderInput.o BitmapToJpeg/HuffmanEncoder.o BitmapToJpeg/JpegEncoder.o BitmapToJpeg/Pixel.o BitmapToJpeg/Tables.o
 
-all: basicWebcamFunctionality.o email.o
-	gcc -I/usr/include/opencv2   main.c -o main basicWebcamFunctionality.o email.o `pkg-config --libs opencv`
+all: main clean
 
-%.o: %.c $(DEPS)
-	gcc -I/usr/include/opencv2  -c -o $@ $<
+jpegtoavi.o: jpegtoavi.c avifmt.h byteswap.h
+	$(CC) $(CFLAGS) -c $< -o $@ 
+	
+%.o: %.c %.h
+	$(CC) $(CFLAGS) -c $< -o $@ 	
 
-webcamDemo: basicWebcamFunctionality.o webcamDemo.o email.o
-	gcc -o $@ basicWebcamFunctionality.o webcamDemo.o email.o
-
-opencvDemo:
-	g++ -ggdb -I/usr/include/opencv2 -o main test.cpp `pkg-config --libs opencv`
-
-
+main: $(OBJECTS)
+	gcc -I/usr/include/opencv2   main.c -o main $(OBJECTS) `pkg-config --libs --cflags opencv` -ldl -lm
+	
 clean:
-	rm -f webcamDemo main
 	rm -f *~
 	rm -f *.o
+	rm -f BitmapToJpeg/*.o
+	rm -f JpegToAvi/*.o

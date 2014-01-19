@@ -5,9 +5,8 @@
 #include <unistd.h>
 #include <math.h>
 #include <signal.h>
-#include "core/core_c.h"
-#include "core/types_c.h"
-#include "highgui/highgui_c.h"
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 #define DURING_RECORDING_INTERVAL 3000000
 #define DURING_WAITING_INTERVAL 200000
@@ -30,34 +29,6 @@ void intHandler(int dummy) {
     keepGoing=0;
 }
 
-/*int isDifferent(char* first, char* second){
-	int diffrentPixelsNo=0;
-	char* p1 = first;
-	char* p2 = second;
-	for(i=0;i<IMAGE_DATA_SIZE;i++){		
-		if(abs((int)*p1-(int)*p2)>PIXEL_VALUE_EPSILON)
-			diffrentPixelsNo++;
-		p1++;
-		p2++;
-	}
-	int differentInPercents = floor(diffrentPixelsNo*100 / IMAGE_DATA_SIZE);
-	printf("pictures different in: %d%%, returning %d\n",differentInPercents,differentInPercents>MINIMAL_DIFFERENCE_PERCENTAGE);
-	fflush(stdout);
-	return differentInPercents>MINIMAL_DIFFERENCE_PERCENTAGE;
-}*/
-
-// recording loop, stops recording if nothing changes on view
-/*void recordingLoop(char* previousImage, char* actualImage){
-	startRecording();
-	while(isDifferent(previousImage,actualImage) && keepGoing){
-		memcpy(previousImage,actualImage,IMAGE_DATA_SIZE);
-		usleep(DURING_RECORDING_INTERVAL);
-		memcpy(actualImage,takePicture()->imageData,IMAGE_DATA_SIZE);
-	}
-	stopRecording();
-}
-*/
-
 //starts recording if something changes
 void detectingMotionLoop(){
 	char* actualImage=(char*)malloc(IMAGE_DATA_SIZE);
@@ -66,21 +37,24 @@ void detectingMotionLoop(){
 	memcpy(actualImage,takePicture()->imageData,IMAGE_DATA_SIZE);
 	while(keepGoing){
 		memcpy(previousImage,actualImage,IMAGE_DATA_SIZE);
-		if(isDifferent(previousImage,actualImage))
+        imageData = takePicture()->imageData;
+        memcpy(actualImage,imageData,IMAGE_DATA_SIZE);
+		if(isDifferent(previousImage,actualImage)){
 			startRecording();
-		imageData = takePicture()->imageData;
-		memcpy(actualImage,imageData,IMAGE_DATA_SIZE);
+            imageData = takePicture()->imageData;
+            memcpy(actualImage,imageData,IMAGE_DATA_SIZE);
+        }
+		
+		
 		usleep(DURING_WAITING_INTERVAL);
 	}
+	free(actualImage);
+    free(previousImage);
 }
 
 int main(){
 	//init&teardown
 	init();
-	if (atexit(teardown) != 0) {
-		fprintf(stderr, "cannot set exit function\n");
-		return EXIT_FAILURE;
-	}
 	signal(SIGINT, intHandler);
 
 	//main loop

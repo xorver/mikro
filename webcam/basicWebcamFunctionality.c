@@ -3,16 +3,19 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <string.h>
-#include "core/core_c.h"
-#include "core/types_c.h"
-#include "highgui/highgui_c.h"
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
+#include "JpegToAvi/jpegtoavi.h"
 #include "email.h"
+#include "BitmapToJpeg/BitmapToJpeg.h"
+
 
 CvCapture* capture;
 int createdMovies=0;
 
 void webcamInit(){
-	capture = cvCaptureFromCAM(CV_CAP_ANY); //Capture using any camera connected to your system
+	capture = cvCaptureFromCAM(1); //Capture using any camera connected to your system
+    jpegEncoderInit();
 	mkdir(PICTURE_PATH, 0777);
 	mkdir(VIDEO_PATH, 0777);
 	chmod("/dev/video0", 0777);
@@ -26,11 +29,14 @@ void startRecording(){
 	printf("***start recoding***\n");
 	fflush(stdout);
 	
-	char* actualBitmap=(char*)malloc(IMAGE_DATA_SIZE);
-	char* previousBitmap=(char*)malloc(IMAGE_DATA_SIZE);
+	char* actualBitmap=(char*) malloc(IMAGE_DATA_SIZE);
+	char* previousBitmap=(char*) malloc(IMAGE_DATA_SIZE);
+    char* path = (char*) malloc(strlen(PICTURE_PATH)+10);
+    char suffix[9];
 	IplImage* actualImage;
 	int equalInRow=0;
 	int j=0;
+    
 	while(equalInRow<EQL_IN_ROW_TO_STOP_RECORDING){
 		actualImage = takePicture();
 		if((j % NTH_FRAME_OF_RECORD)==0){
@@ -41,18 +47,28 @@ void startRecording(){
 			else
 				equalInRow++;
 		}
-		//save in dir (actualImage,strcat(PICTURE_PATH,itoa(j)))
+		//prepare path
+		strcpy(path,PICTURE_PATH);
+        sprintf(suffix,"%d",j);
+        strcat(path,suffix);
+        
+		storeToFile(actualImage,path);
 		j++;
 	}
-	char* aviPath = malloc(strlen(VIDEO_PATH)+10);
-	sprintf(aviPath,"%s%d%s",VIDEO_PATH,createdMovies,".avi");
+	free(actualBitmap);
+    free(previousBitmap);
+    free(path);
+
 	printf("***stop recording***\n");
 	fflush(stdout);
-	
-	//make movie (i,VIDEO_FPS,PICTURE_PATH,aviPath)
-	system(strcat("touch ",aviPath)); //todo delete
-	
-	sendVideo(aviPath);
+    
+    char aviPath[50];
+    strcpy(aviPath,VIDEO_PATH);
+    strcat(aviPath,"video.avi");
+    
+    makeMovie(j, PICTURE_PATH, aviPath, VIDEO_FPS);
+
+	sendVideo(aviPath); 
 	createdMovies++;
 }
 
@@ -81,4 +97,5 @@ void stopRecording(){
 
 void webcamTeardown(){
 	cvReleaseCapture(&capture); //Release capture.
+    jpegEncoderTeardown();
 }
