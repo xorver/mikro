@@ -14,7 +14,7 @@ CvCapture* capture;
 int createdMovies=0;
 
 void webcamInit(){
-	capture = cvCaptureFromCAM(1); //Capture using any camera connected to your system
+	capture = cvCaptureFromCAM(0); //Capture using any camera connected to your system
     jpegEncoderInit();
 	mkdir(PICTURE_PATH, 0777);
 	mkdir(VIDEO_PATH, 0777);
