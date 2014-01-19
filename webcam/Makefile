@@ -1,7 +1,7 @@
 CC = gcc
 OBJECTS = basicWebcamFunctionality.o email.o JpegToAvi/jpegtoavi.o JpegToAvi/llist.o BitmapToJpeg/BitmapToJpeg.o BitmapToJpeg/BitBuffer.o BitmapToJpeg/Bitmap.o BitmapToJpeg/DibHeader.o BitmapToJpeg/DiscreteCosineTransform.o BitmapToJpeg/EncoderInput.o BitmapToJpeg/HuffmanEncoder.o BitmapToJpeg/JpegEncoder.o BitmapToJpeg/Pixel.o BitmapToJpeg/Tables.o
 
-all: main clean
+all: main
 
 jpegtoavi.o: jpegtoavi.c avifmt.h byteswap.h
 	$(CC) $(CFLAGS) -c $< -o $@ 

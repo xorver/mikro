@@ -67,8 +67,9 @@ void startRecording(){
     strcat(aviPath,"video.avi");
     
     makeMovie(j, PICTURE_PATH, aviPath, VIDEO_FPS);
-
-	sendVideo(aviPath); 
+	printf("***avi file saved***\n");
+//	sendVideo(aviPath); 
+	printf("***email sent***\n");
 	createdMovies++;
 }
 
