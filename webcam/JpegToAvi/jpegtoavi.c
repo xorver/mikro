@@ -345,9 +345,9 @@ int makeMovieInside(int argSize, char **arguments,char* path)
 }
 
 void makeMovie(int amount, char* picturesPath, char* videoPath, int fps){
-    char** photos = malloc(sizeof(char*)*(amount+4));
+    char** photos = malloc(sizeof(char*)*((2*amount)+4));
     int i;
-    for(i=0; i<amount+4; i++){
+    for(i=0; i<(2*amount)+4; i++){
         photos[i] = malloc(50); 
     }
     sprintf(photos[0], "moviemaker");
@@ -356,14 +356,18 @@ void makeMovie(int amount, char* picturesPath, char* videoPath, int fps){
     sprintf(photos[3], "%d", H);
 
     char tmp[50];
-    for(i=4; i<amount+4;i++){
-        sprintf(tmp, "%d", (i-4));  
-        strcpy(photos[i], picturesPath);
-        strcat(photos[i], tmp);
+    for(i=4; i<amount+4;i=i++){
+        sprintf(tmp, "%d", (i-4)); 
+	int ind= (i-4)*2+4;
+        strcpy(photos[ind], picturesPath);
+        strcat(photos[ind], tmp);
+	sprintf(tmp, "%d", (i-4));  
+        strcpy(photos[ind+1], picturesPath);
+        strcat(photos[ind+1], tmp);
     }
-    makeMovieInside(amount+4, photos, videoPath);
+    makeMovieInside(2*amount+4, photos, videoPath);
     
-    for(i=0; i<amount+4; i++){
+    for(i=0; i<2*amount+4; i++){
         free(photos[i]);
     }
     free(photos);
